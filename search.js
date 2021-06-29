@@ -3,7 +3,7 @@ function Search(e, language) {
 
     var start = "https://en.wiktionary.org/wiki/";
     var end = "#" + language;
-    var searchTerm = document.getElementById("searchTerm").value;
+    var searchTerm = document.getElementById("searchTerm").value.toLowerCase();
 
     var link = start.concat(searchTerm, end);
 
