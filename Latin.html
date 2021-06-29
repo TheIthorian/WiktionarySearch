@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <link rel="icon"
+        href="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/U%2B216C.svg/1200px-U%2B216C.svg.png" />
+    <title>Latin Search</title>
+</head>
+<style>
+    :root {
+        /* --primary: rgb(65, 118, 65); */
+        --primary: rgb(73, 158, 108);
+        --secondary: rgb(245, 245, 245);
+    }
+
+    body {
+        background: var(--secondary);
+    }
+
+    h1 {
+        color: var(--primary);
+        font-size: 36px;
+    }
+
+    .recent-container {
+        padding: 20px;
+    }
+
+    li {
+        margin: 5px;
+        padding: 5px;
+    }
+
+    li>button {
+        background: none;
+        border: none;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    form {
+        display: flex;
+    }
+
+    .input-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input-container::after {
+        width: 0%;
+        height: 2px;
+        background: var(--primary);
+        transition: 300ms;
+        content: "";
+    }
+
+    .input-container:hover::after,
+    .input-container.conplete::after {
+        width: 100%;
+    }
+
+    input,
+    button.submit {
+        font-size: 24px;
+    }
+
+    input[type="text"] {
+        display: border-box;
+        padding: 10px;
+        border: none;
+        outline: none;
+        border: solid 1px;
+    }
+
+    input[type="text"]:focus {
+        border: solid 2px var(--primary);
+    }
+
+    input[type="submit"],
+    button.submit {
+        padding: 10px;
+        border: none;
+        background-color: var(--primary);
+        color: var(--secondary);
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    input[type="submit"]:hover,
+    button.submit:hover {
+        filter: brightness(90%);
+    }
+
+    @media (max-width: 700px) {
+        input {
+            font-size: 18px;
+        }
+
+        form {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<body>
+    <div class="search-container">
+        <h1>
+            Latin Search
+        </h1>
+        <!-- <form name="searchbox" class="searchbox" action="https://en.wiktionary.org/wiki/Special:Search" target="_blank">
+            <input id="search-input" class="" name="search" type="text" autocomplete="off">
+            <input type="submit" name="go" class="" value="Try exact match" onclick="logSearch(event)">
+            <input type="submit" name="fulltext" class="" value="Full text search" onclick="logSearch(event)">
+            <input type="button" name="test" class="" value="test text search" onclick="logSearch(event)">
+        </form> -->
+        <div search autocomplete="off">
+            <input type="text" id="searchTerm" autocomplete="off" name="searchTerm" />
+            <button class="submit" onclick="Search(event)">
+                Search
+            </button>
+        </div>
+    </div>
+
+
+    <div class="recent-container" tyle="text-align:left;">
+        <h2>Recent Searches:</h2>
+        <ol id="history">
+        </ol>
+        <button onclick="clearAllHistory()">Clear all</button>
+    </div>
+</body>
+
+
+<script>
+
+    function Search(e) {
+
+        var start = "https://en.wiktionary.org/wiki/";
+        var end = "#Latin";
+        var searchTerm = document.getElementById("searchTerm").value;
+
+        var link = start.concat(searchTerm, end);
+
+
+        console.log(e, link);
+
+        logSearch(e, link);
+
+        window.open(link, '_blank');
+
+    }
+
+    class History {
+        constructor(inputValue, urlValue) {
+            this.input = inputValue;
+            this.url = urlValue;
+        }
+    }
+
+    function logSearch(e, link) {
+        // Old code to use wiktionary form
+        // let url = e.target.parentNode.action;
+        // let type = e.target;
+        // let input = document.getElementById("search-input").value;
+        // console.log(url, type, input);
+        // url = url + "?search=" + input + "&" + type.name + "=" + type.value.replace(/\s/g, '+') ;
+
+        let url = link;
+        let input = e.target.previousElementSibling.value;
+
+        console.log(url);
+
+        let history = JSON.parse(localStorage.getItem("searchHistory_latin"));
+
+        let repeat = false;
+
+        // First one
+        if (!history) { history = [new History(input, url)]; }
+
+        else {
+            // check if it's a repeat
+            for (const record of history) {
+                if (record.input == input) { repeat = true; break }
+            }
+            // It it's not, add it to the list
+            if (!repeat) { history.push(new History(input, url)); }
+
+            // Otherwise move it to the top
+            else {
+                let index = history.length - history.findIndex(x => x.input == input) - 1;
+                history = clearHistoryByIndex(index);
+                history.push(new History(input, url));
+            }
+        }
+
+        if (history.length > 10) { history.shift(); }
+
+        localStorage.setItem("searchHistory_latin", JSON.stringify(history));
+
+        showHistory();
+    }
+
+    function showHistory() {
+        let list = document.getElementById("history");
+        let listDisplay = "";
+
+        let records = JSON.parse(localStorage.getItem("searchHistory_latin")) ? JSON.parse(localStorage.getItem("searchHistory_latin")).reverse() : [];
+        let l = records.length;
+
+        for (let i = 0; i < l; i++) {
+            let record = records[i];
+            listDisplay += "<li><a target='_blank' href='" + record.url + "'>" + record.input + "</a><button id='Clear:" + i + "' value='" + i +
+                "' onclick='clearHistoryByEvent(event)'>X</button></li>";
+        }
+
+        list.innerHTML = listDisplay;
+    }
+
+    function clearHistoryByEvent(e) {
+        let index = e.target.value;
+
+        clearHistoryByIndex(index);
+    }
+
+    function clearHistoryByIndex(index) {
+        index = index.toString();
+        let history = JSON.parse(localStorage.getItem("searchHistory_latin"));
+        let target = document.getElementById("Clear:" + index);
+
+        history.splice(history.length - index - 1, 1);
+
+        localStorage.setItem("searchHistory_latin", JSON.stringify(history));
+
+        target.parentNode.style.display = 'none';
+
+        return history;
+    }
+
+    function clearAllHistory() {
+        localStorage.removeItem("searchHistory_latin");
+        for (const listItem of document.getElementById("history").childNodes) {
+            listItem.style.display = 'none';
+        }
+    }
+
+    (screenload = () => { showHistory() })();
+
+
+
+
+</script>
+
+
+
+</html>
