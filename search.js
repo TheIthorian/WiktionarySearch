@@ -110,3 +110,12 @@ function clearAllHistory(language) {
 }
 
 
+window.onload = function() {
+    window.addEventListener('keydown', function(event) {
+        if (event.code === 'Enter')
+        {
+            // event.preventDefault();
+            document.getElementById('submit').click();
+        }
+    });
+}
