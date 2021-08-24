@@ -19,7 +19,6 @@
 </style>
 
 <body>
-    <a href="./Latin.html" id="switch-language">Latin</a>
     <div class="search-container">
         <h1>
             Greek Search
@@ -30,10 +29,14 @@
             <input type="submit" name="fulltext" class="" value="Full text search" onclick="logSearch(event)">
             <input type="button" name="test" class="" value="test text search" onclick="logSearch(event)">
         </form> -->
+        
         <input type="text" id="searchTerm" autocomplete="off" name="searchTerm"/>
-        <button id="submit" class="submit" onclick="Search(event, 'Ancient_Greek')"> 
-            Search
-        </button>       
+        <div class="button-container">
+            <button id="submit" class="submit" onclick="Search(event, 'Ancient_Greek')"> 
+                Search
+            </button>  
+            <a class="submit secondary" href="./Latin.html" id="switch-language">Latin</a>
+        </div>     
     </div>
     
 

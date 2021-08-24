@@ -12,8 +12,7 @@
     <script src="./search.js"></script>
 </head>
 
-<body>
-    <a href="./Greek.html" id="switch-language">Greek</a>
+<body>    
     <div class="search-container">
         <h1>
             Latin Search
@@ -25,9 +24,12 @@
             <input type="button" name="test" class="" value="test text search" onclick="logSearch(event)">
         </form> -->
         <input type="text" id="searchTerm" autocomplete="off" name="searchTerm" />
-        <button id="submit" class="submit" onclick="Search(event, 'Latin')">
-            Search
-        </button>
+        <div class="button-container">
+            <button id="submit" class="submit" onclick="Search(event, 'Latin')">
+                Search
+            </button>
+            <a class="submit secondary" href="./Greek.html" id="switch-language">Greek</a>
+        </div>
     </div>
 
 

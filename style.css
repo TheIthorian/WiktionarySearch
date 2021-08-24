@@ -41,6 +41,12 @@ form {
     display: flex;
 }
 
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .input-container {
     display: flex;
     flex-direction: column;
@@ -60,6 +66,7 @@ form {
 }
 
 input,
+a.submit,
 button.submit {
     font-size: 24px;
 }
@@ -77,6 +84,7 @@ input[type="text"]:focus {
 }
 
 input[type="submit"],
+a.submit,
 button.submit {
     padding: 10px;
     border: none;
@@ -87,14 +95,21 @@ button.submit {
 }
 
 input[type="submit"]:hover,
+a.submit,
 button.submit:hover {
     filter: brightness(90%);
 }
 
 #switch-language {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+    /* position: absolute; */
+    /* top: 5px;
+    right: 5px; */
+}
+
+.secondary {
+    background-color: transparent !important; 
+    color: var(--primary) !important;
+    border: solid 2px var(--primary) !important;
 }
 
 @media (max-width: 700px) {

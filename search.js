@@ -32,7 +32,7 @@ function logSearch(e, link, language) {
     // url = url + "?search=" + input + "&" + type.name + "=" + type.value.replace(/\s/g, '+') ;
 
     let url = link;
-    let input = e.target.previousElementSibling.value;
+    let input = e.target.parentNode.previousElementSibling.value;
 
     console.log(url);
 
