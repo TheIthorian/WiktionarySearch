@@ -1,12 +1,27 @@
 
 function Search(e, language) {
 
-    var start = "https://en.wiktionary.org/wiki/";
-    var end = "#" + language;
-    var searchTerm = document.getElementById("searchTerm").value.toLowerCase();
+    var start = '';
+    var searchTerm;
+    var end;
+    var link;
 
-    var link = start.concat(searchTerm, end);
+    if (language === 'Ancient_Greek' && document.getElementById("alternate-search").checked) {
 
+        start = 'https://logeion.uchicago.edu/'
+        searchTerm = document.getElementById("searchTerm").value.toLowerCase();
+
+        link = start.concat(searchTerm);
+
+    } else {
+
+        start = "https://en.wiktionary.org/wiki/";        
+        searchTerm = document.getElementById("searchTerm").value.toLowerCase();
+        end = "#" + language;
+
+        link = start.concat(searchTerm, end);
+        
+    }
 
     console.log(e, link);
 
